@@ -1,0 +1,67 @@
+#include <LiquidCrystal.h> 
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+int tempo = 0; 
+int botao1 = 9;
+int botao2 = 8;
+int botao3 = 7;
+int botao4 = 13;
+
+
+void setup(){
+lcd.begin(16, 2); 
+pinMode(botao1, INPUT);
+pinMode(botao2, INPUT);
+pinMode(botao3, INPUT);
+pinMode(botao4, INPUT);
+pinMode(6, OUTPUT);
+}
+
+void loop(){
+  
+  digitalWrite(6, LOW);
+
+  
+  tempo = constrain(tempo, 5, 30);
+  
+  if(digitalRead(botao3) == HIGH)
+    tempo++;
+  
+  if(digitalRead(botao2) == HIGH)
+    tempo--;
+  
+  if(digitalRead(botao1) == LOW)
+    tempo = 30;
+  
+	lcd.clear(); 
+	lcd.setCursor(0, 0);
+	lcd.print("DEFINA O TEMPO:"); 
+	lcd.setCursor(0, 1); 
+	lcd.print(tempo);
+  	lcd.print(" MINUTO(S)");
+	delay(200);
+  
+  if(digitalRead(botao4) == LOW){
+    tempo = tempo * 60;
+    while (tempo != 0){
+
+  		lcd.clear(); 
+		lcd.setCursor(0, 0);
+		lcd.print("TEMPO RESTANTE:");
+    	lcd.setCursor(0, 1); 
+		lcd.print(tempo);
+      	lcd.print(" SEGUNDOS");
+		delay(200);    
+        digitalWrite(6, HIGH);
+    	tempo--;
+      if(digitalRead(botao4) == LOW){
+        lcd.clear(); 
+		lcd.setCursor(0, 0);
+		lcd.print("INTERROMPIDO");
+		delay(1000);  
+        tempo = 0;
+      }
+    }
+      
+  }
+  
+}
